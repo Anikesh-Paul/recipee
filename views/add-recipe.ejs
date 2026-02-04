@@ -1,0 +1,133 @@
+<%- include('partials/header') %>
+
+<div class="max-w-7xl mx-auto px-6 lg:px-12 mb-60">
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-32 py-32 md:py-48 animate-fade-up">
+        <div class="lg:col-span-12 space-y-16 mb-24">
+            <div class="space-y-6">
+                <a href="/" class="group inline-flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.4em] text-[#cccccc] hover:text-black transition-colors focus-ring rounded">
+                    <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path></svg>
+                    Archive Home
+                </a>
+                <h1 class="text-7xl md:text-[140px] font-black tracking-tighter leading-[0.75] text-black italic">
+                    Contribute.
+                </h1>
+            </div>
+            <p class="text-2xl md:text-4xl text-[#444444] font-light leading-snug max-w-4xl">
+                Authorize new culinary algorithms. Precision in documentation ensures global reproducibility and gastronomic stability.
+            </p>
+        </div>
+
+        <div class="lg:col-span-8">
+            <form action="/api/recipes" method="POST" class="space-y-32">
+                <!-- Core Identity Section -->
+                <div class="space-y-16">
+                    <div class="flex items-center gap-8 mb-12">
+                        <span class="text-[11px] font-black uppercase tracking-[0.5em] text-black">01 ID</span>
+                        <div class="flex-grow h-[1px] bg-black opacity-10"></div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                        <div class="space-y-4 group">
+                            <label class="text-[10px] font-black uppercase tracking-[0.4em] text-[#999999] group-focus-within:text-black transition-colors">Protocol Title</label>
+                            <input type="text" name="title" required placeholder="E.g. NOCTURNAL ESPRESSO" 
+                                class="w-full bg-transparent border-b-2 border-[#eeeeee] pb-4 text-3xl font-black tracking-tighter placeholder:text-[#eeeeee] focus:border-black outline-none transition-all focus-ring rounded-none">
+                        </div>
+                        <div class="space-y-4 group">
+                            <label class="text-[10px] font-black uppercase tracking-[0.4em] text-[#999999] group-focus-within:text-black transition-colors">Practitioner Name</label>
+                            <input type="text" name="author" required placeholder="Your Persona" 
+                                class="w-full bg-transparent border-b-2 border-[#eeeeee] pb-4 text-3xl font-black tracking-tighter placeholder:text-[#eeeeee] focus:border-black outline-none transition-all focus-ring rounded-none">
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 group">
+                        <label class="text-[10px] font-black uppercase tracking-[0.4em] text-[#999999] group-focus-within:text-black transition-colors">Sensory Abstract</label>
+                        <textarea name="description" required rows="2" placeholder="Describe the fundamental objective of this sequence..." 
+                            class="w-full bg-transparent border-b-2 border-[#eeeeee] pb-4 text-2xl font-light tracking-tight placeholder:text-[#eeeeee] focus:border-black outline-none transition-all resize-none focus-ring rounded-none"></textarea>
+                    </div>
+                </div>
+
+                <!-- Technical Specs Section -->
+                <div class="space-y-16">
+                    <div class="flex items-center gap-8 mb-12">
+                        <span class="text-[11px] font-black uppercase tracking-[0.5em] text-black">02 DATA</span>
+                        <div class="flex-grow h-[1px] bg-black opacity-10"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
+                        <div class="space-y-8">
+                            <div class="flex items-center justify-between">
+                                <label class="text-[10px] font-black uppercase tracking-[0.4em] text-[#999999]">Pantry Matrix</label>
+                                <span class="text-[9px] font-bold text-[#cccccc] italic">Itemized</span>
+                            </div>
+                            <textarea name="ingredients" required rows="9" placeholder="Component 01&#10;Component 02&#10;..." 
+                                class="w-full bg-[#f8f8f8] p-10 text-xl font-light placeholder:text-[#cccccc] focus:bg-white border-2 border-transparent focus:border-black outline-none transition-all resize-none focus-ring"></textarea>
+                        </div>
+                        <div class="space-y-8">
+                            <div class="flex items-center justify-between">
+                                <label class="text-[10px] font-black uppercase tracking-[0.4em] text-[#999999]">Assembly Logic</label>
+                                <span class="text-[9px] font-bold text-[#cccccc] italic">Step-by-step</span>
+                            </div>
+                            <textarea name="instructions" required rows="9" placeholder="Initialize components...&#10;Process via thermal delta...&#10;..." 
+                                class="w-full bg-[#f8f8f8] p-10 text-xl font-light placeholder:text-[#cccccc] focus:bg-white border-2 border-transparent focus:border-black outline-none transition-all resize-none focus-ring"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Data Section -->
+                <div class="space-y-16">
+                    <div class="flex items-center gap-8 mb-12">
+                        <span class="text-[11px] font-black uppercase tracking-[0.5em] text-black">03 VISUALS</span>
+                        <div class="flex-grow h-[1px] bg-black opacity-10"></div>
+                    </div>
+                    
+                    <div class="space-y-4 group">
+                        <label class="text-[10px] font-black uppercase tracking-[0.4em] text-[#999999] group-focus-within:text-black transition-colors">Imagery Coordinate (URL)</label>
+                        <input type="url" name="image" placeholder="https://source.unsplash.com/..." 
+                            class="w-full bg-transparent border-b-2 border-[#eeeeee] pb-4 text-base font-mono font-light placeholder:text-[#eeeeee] focus:border-black outline-none transition-all focus-ring rounded-none">
+                    </div>
+                </div>
+
+                <!-- Submission Controls -->
+                <div class="pt-24 flex flex-col md:flex-row items-center justify-between gap-16 border-t-4 border-black">
+                    <div class="space-y-3 text-center md:text-left">
+                        <p class="text-xl font-black italic tracking-tighter text-black">Finalize Metadata.</p>
+                        <p class="text-[10px] text-[#999999] uppercase tracking-widest font-bold">Encrypted transmission via standard protocol.</p>
+                    </div>
+                    <button type="submit" 
+                        class="group relative overflow-hidden px-24 py-8 bg-black text-white text-[11px] font-black uppercase tracking-[0.5em] hover:scale-105 transition-all duration-500 active:scale-95 focus-ring rounded-lg">
+                        <span class="relative z-10 text-white">Transmit</span>
+                        <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <aside class="lg:col-span-4 space-y-16">
+            <div class="sticky top-32 space-y-16">
+                <!-- Preview Placeholder -->
+                <div class="aspect-[3/4] bg-[#fafafa] border-2 border-dashed border-[#eeeeee] p-12 flex items-center justify-center text-center group hover:border-[#cccccc] transition-colors">
+                    <div class="space-y-8 animate-pulse group-hover:animate-none">
+                        <div class="w-16 h-16 mx-auto border-2 border-[#eeeeee] flex items-center justify-center rounded-full group-hover:border-black transition-colors">
+                            <svg class="w-6 h-6 text-[#cccccc] group-hover:text-black transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        </div>
+                        <p class="text-[10px] font-black uppercase tracking-[0.4em] text-[#cccccc] group-hover:text-black transition-colors">Pending Visual Data</p>
+                    </div>
+                </div>
+
+                <!-- Policy Block -->
+                <div class="bg-black text-white p-12 md:p-16 space-y-12 transform hover:-translate-y-2 transition-transform duration-500">
+                    <div class="space-y-4">
+                        <h3 class="text-[11px] font-black uppercase tracking-[0.5em] text-[#666666]">Submission Ethics</h3>
+                        <p class="text-lg font-light leading-relaxed">
+                            Every broadcast is permanent. Ensure measurements are validated against physical constraints before transmission.
+                        </p>
+                    </div>
+                    <div class="h-[1px] bg-white opacity-20 w-12"></div>
+                    <div class="text-[9px] font-bold text-[#666666] tracking-[0.3em]">SECURE CHANNEL 04.A</div>
+                </div>
+            </div>
+        </aside>
+    </section>
+</div>
+
+<%- include('partials/footer') %>

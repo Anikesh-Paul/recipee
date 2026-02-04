@@ -1,0 +1,90 @@
+<%- include('partials/header') %>
+
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <!-- Hero Section -->
+    <section class="py-40 md:py-60 animate-fade-up">
+        <div class="max-w-4xl space-y-16">
+            <div class="inline-flex items-center gap-4 py-3 px-5 rounded-full bg-[#f8f8f8] border border-[#eeeeee] select-none">
+                <span class="w-2 h-2 rounded-full bg-black animate-pulse"></span>
+                <span class="text-[9px] font-black uppercase tracking-[0.4em]">Volume 0.4 Distributed</span>
+            </div>
+            <h1 class="text-7xl md:text-[140px] font-black tracking-tighter leading-[0.75] text-black italic">
+                FORM <span class="not-italic text-[#eeeeee]">&</span><br/>FLAVOR.
+            </h1>
+            <p class="text-xl md:text-3xl text-[#666666] font-light leading-snug max-w-2xl">
+                A minimalist archive curated for the modern culinary practitioner. Discover protocols that balance structural integrity with pure sensory experience.
+            </p>
+            <div class="flex flex-wrap items-center gap-12 pt-10">
+                <a href="#collection" class="group flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.4em] border-b-2 border-black pb-3 hover:text-[#999999] hover:border-[#cccccc] transition-all cursor-pointer focus-ring rounded">
+                    Explore Archive
+                    <svg class="w-3 h-3 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </a>
+                <a href="/add-recipe" class="text-[11px] font-black uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-all cursor-pointer focus-ring rounded">Submit Protocol</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bento Grid Intro (Stats + Filter) -->
+    <section id="collection" class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-40 animate-fade-up stagger-1">
+        <div class="md:col-span-8 bg-[#fafafa] border border-[#eeeeee] p-12 md:p-24 flex flex-col justify-between hover:border-black transition-all duration-700 group cursor-default">
+            <div class="space-y-4">
+                <div class="text-[10px] font-black uppercase tracking-[0.5em] text-[#cccccc] group-hover:text-black transition-colors">Catalog Interface</div>
+                <h2 class="text-6xl md:text-[100px] font-black tracking-tighter italic leading-none mb-12">The<br/>Catalog.</h2>
+            </div>
+            <div class="flex flex-wrap gap-x-16 gap-y-8">
+                <% ['All', 'Entrées', 'Liquids', 'Solid Form'].forEach((cat, i) => { %>
+                    <button class="relative group/btn text-[12px] font-black uppercase tracking-[0.3em] <%= i === 0 ? 'text-black' : 'text-[#cccccc]' %> hover:text-black transition-colors focus-ring cursor-pointer">
+                        <%= cat %>
+                        <span class="absolute -bottom-3 left-0 w-0 h-[3px] bg-black transition-all duration-500 group-hover/btn:w-full <%= i === 0 ? 'w-full' : '' %>"></span>
+                    </button>
+                <% }) %>
+            </div>
+        </div>
+        <div class="md:col-span-4 grid grid-rows-2 gap-10">
+            <div class="bg-black text-white p-12 flex flex-col justify-center space-y-6 hover:translate-y-[-8px] transition-transform duration-500 cursor-default">
+                <div class="text-7xl font-black tracking-tighter">512</div>
+                <div class="text-[10px] font-bold uppercase tracking-[0.5em] text-[#666666]">Unique Sequences</div>
+            </div>
+            <div class="bg-white border border-[#eeeeee] p-12 flex flex-col justify-center space-y-6 hover:bg-[#fafafa] transition-colors duration-500 cursor-default">
+                <div class="text-7xl font-black tracking-tighter">12.4k</div>
+                <div class="text-[10px] font-bold uppercase tracking-[0.5em] text-[#cccccc]">Global Practitioners</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recipe Grid -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-40 mb-60">
+        <% recipes.forEach((recipe, index) => { %>
+            <article class="group animate-fade-up" style="animation-delay: <%= 0.2 + (index * 0.1) %>s">
+                <a href="/recipe/<%= recipe.id %>" class="block space-y-12 focus-ring rounded-xl cursor-pointer">
+                    <div class="overflow-hidden aspect-[4/5] bg-[#fafafa] border border-[#eeeeee] relative">
+                        <img src="<%= recipe.image %>" alt="<%= recipe.title %>" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-[1.2s] ease-out scale-100 group-hover:scale-110">
+                        <div class="absolute top-8 right-8 mix-blend-difference text-white text-[11px] font-black tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            VIEW DATA
+                        </div>
+                    </div>
+                    <div class="space-y-8">
+                        <div class="flex items-start justify-between">
+                            <h3 class="text-4xl font-black tracking-tighter leading-[0.9] italic group-hover:text-[#666666] transition-colors"><%= recipe.title %></h3>
+                            <span class="text-[11px] font-black uppercase tracking-[0.4em] text-[#dddddd] pt-2">SEQ.0<%= index + 1 %></span>
+                        </div>
+                        <p class="text-lg text-[#666666] font-light leading-relaxed line-clamp-2">
+                            <%= recipe.description %>
+                        </p>
+                        <div class="pt-8 flex items-center justify-between border-t border-[#eeeeee]">
+                            <div class="flex items-center gap-4">
+                                <div class="w-3 h-3 rounded-full bg-black"></div>
+                                <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#999999]"><%= recipe.author %></span>
+                            </div>
+                            <div class="w-12 h-12 flex items-center justify-center border border-[#eeeeee] group-hover:bg-black group-hover:border-black transition-all duration-500 group-hover:text-white group-hover:rotate-45">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </article>
+        <% }) %>
+    </section>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,207 @@
+    </main>
+    <footer class="bg-white border-t-2 border-black pt-32 pb-16">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-16 pb-32 border-b border-[#eeeeee]">
+                <div class="md:col-span-5 space-y-12">
+                    <a href="/" class="group flex items-center gap-4 focus-ring rounded-lg w-fit">
+                        <div class="w-12 h-12 bg-black flex items-center justify-center text-white text-[12px] font-black tracking-tighter transform group-hover:-rotate-45 transition-transform duration-500">A</div>
+                        <span class="text-[12px] font-black tracking-[0.5em] uppercase">ALIMENTA.</span>
+                    </a>
+                    <p class="text-xl text-[#444444] font-light leading-relaxed max-w-sm">
+                        Curating the future of gastronomic documentation. A permanent archive of high-fidelity culinary sequences.
+                    </p>
+                    <div class="flex gap-8">
+                        <a href="#" class="text-[11px] font-black uppercase tracking-[0.4em] hover:text-[#999999] transition-colors">Instagram</a>
+                        <a href="#" class="text-[11px] font-black uppercase tracking-[0.4em] hover:text-[#999999] transition-colors">Twitter</a>
+                        <a href="#" class="text-[11px] font-black uppercase tracking-[0.4em] hover:text-[#999999] transition-colors">Substack</a>
+                    </div>
+                </div>
+                
+                <div class="md:col-span-2 space-y-8">
+                    <h4 class="text-[11px] font-black uppercase tracking-[0.5em] text-black">Exploration</h4>
+                    <ul class="space-y-4">
+                        <li><a href="/" class="text-[10px] font-bold uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-colors">Archive</a></li>
+                        <li><a href="#" class="text-[10px] font-bold uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-colors">Experiments</a></li>
+                        <li><a href="#" class="text-[10px] font-bold uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-colors">Guidelines</a></li>
+                    </ul>
+                </div>
+
+                <div class="md:col-span-2 space-y-8">
+                    <h4 class="text-[11px] font-black uppercase tracking-[0.5em] text-black">Network</h4>
+                    <ul class="space-y-4">
+                        <li><a href="/add-recipe" class="text-[10px] font-bold uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-colors">Submit</a></li>
+                        <li><a href="#" class="text-[10px] font-bold uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-colors">Terms</a></li>
+                        <li><a href="#" class="text-[10px] font-bold uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-colors">Privacy</a></li>
+                    </ul>
+                </div>
+
+                <div class="md:col-span-3 space-y-10">
+                    <h4 class="text-[11px] font-black uppercase tracking-[0.5em] text-black">Bulletins</h4>
+                    <p class="text-[11px] text-[#999999] leading-relaxed">Periodic broadcasts of newly authorized culinary sequences.</p>
+                    <form class="flex flex-col gap-4">
+                        <input type="email" placeholder="PROTOCOL@ADDRESS.EXT" class="w-full bg-[#f8f8f8] px-6 py-5 text-[11px] font-black tracking-widest focus:outline-none focus:bg-white border focus:border-black transition-all rounded-lg">
+                        <button type="submit" class="w-full bg-black text-white px-8 py-5 text-[11px] font-black uppercase tracking-[0.5em] transition-all hover:bg-[#333333] rounded-lg">Join Network</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="pt-16 flex flex-col md:flex-row justify-between items-center gap-10">
+                <p class="text-[10px] font-bold uppercase tracking-[0.4em] text-[#cccccc]">
+                    &copy; 2026 ALIMENTA. ALL DATA AUTHORIZED.
+                </p>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="group flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.5em] text-black">
+                    Back to Zenith
+                    <svg class="w-4 h-4 transform group-hover:-translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Chatbox Widget -->
+    <div id="ai-chat-widget" class="fixed bottom-12 right-12 z-[100]">
+        <!-- Chat Toggle Button -->
+        <button id="chat-toggle" class="w-16 h-16 bg-black text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all duration-300 focus-ring">
+            <svg id="chat-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+            <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+
+        <!-- Chat Window -->
+        <div id="chat-window" class="absolute bottom-20 right-0 w-[400px] h-[600px] bg-white border-2 border-black rounded-2xl shadow-2xl flex flex-col overflow-hidden hidden transform translate-y-4 opacity-0 transition-all duration-500">
+            <!-- Header -->
+            <div class="bg-black text-white px-8 py-6 flex items-center justify-between">
+                <div>
+                    <h3 class="text-[11px] font-black uppercase tracking-[0.4em]">Alimenta AI</h3>
+                    <p class="text-[9px] font-bold text-[#666666] tracking-[0.2em]">Culinary Intelligence v1.0</p>
+                </div>
+                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+            </div>
+
+            <!-- Messages Area -->
+            <div id="chat-messages" class="flex-grow overflow-y-auto p-8 space-y-8 bg-[#fafafa]">
+                <!-- AI Welcome Message -->
+                <div class="flex flex-col items-start space-y-2">
+                    <div class="bg-white border border-[#eeeeee] p-5 rounded-2xl rounded-tl-none text-sm font-light leading-relaxed max-w-[85%] text-black shadow-sm">
+                        Welcome to the Alimenta Archive. How may I assist your culinary experimentations today?
+                    </div>
+                    <span class="text-[8px] font-black uppercase tracking-widest text-[#cccccc] ml-2">SYSTEM</span>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-6 bg-white border-t border-[#eeeeee]">
+                <form id="chat-form" class="flex gap-4">
+                    <input type="text" id="chat-input" placeholder="Enter query..." class="flex-grow bg-[#f8f8f8] px-6 py-4 text-xs font-black tracking-widest focus:outline-none focus:bg-white border focus:border-black transition-all rounded-xl" autocomplete="off">
+                    <button type="submit" id="send-btn" class="bg-black text-white p-4 rounded-xl hover:bg-[#333333] transition-all group">
+                        <svg class="w-5 h-5 transform group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const chatWidget = document.getElementById('ai-chat-widget');
+        const chatToggle = document.getElementById('chat-toggle');
+        const chatWindow = document.getElementById('chat-window');
+        const chatIcon = document.getElementById('chat-icon');
+        const closeIcon = document.getElementById('close-icon');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+
+        let isOpen = false;
+
+        chatToggle.addEventListener('click', () => {
+            isOpen = !isOpen;
+            if (isOpen) {
+                chatWindow.classList.remove('hidden');
+                setTimeout(() => {
+                    chatWindow.classList.remove('translate-y-4', 'opacity-0');
+                }, 10);
+                chatIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            } else {
+                chatWindow.classList.add('translate-y-4', 'opacity-0');
+                setTimeout(() => {
+                    chatWindow.classList.add('hidden');
+                }, 500);
+                chatIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        });
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // Add user message to UI
+            addMessage(message, 'user');
+            chatInput.value = '';
+            
+            // Show typing indicator
+            const typingId = 'typing-' + Date.now();
+            addTypingIndicator(typingId);
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message })
+                });
+                
+                const data = await response.json();
+                removeTypingIndicator(typingId);
+                
+                if (data.reply) {
+                    addMessage(data.reply, 'ai');
+                } else {
+                    addMessage('An error occurred in the transmission. Check API configuration.', 'system');
+                }
+            } catch (error) {
+                removeTypingIndicator(typingId);
+                addMessage('Failed to connect to Alimenta Network.', 'system');
+            }
+        });
+
+        function addMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `flex flex-col ${sender === 'user' ? 'items-end' : 'items-start'} space-y-2 animate-fade-up`;
+            
+            const contentClass = sender === 'user' 
+                ? 'bg-black text-white rounded-tr-none' 
+                : (sender === 'system' ? 'bg-red-50 text-red-600 border-red-100' : 'bg-white border border-[#eeeeee] text-black rounded-tl-none shadow-sm');
+                
+            div.innerHTML = `
+                <div class="${contentClass} p-5 rounded-2xl text-sm font-light leading-relaxed max-w-[85%]">
+                    ${text}
+                </div>
+                <span class="text-[8px] font-black uppercase tracking-widest text-[#cccccc] ${sender === 'user' ? 'mr-2' : 'ml-2'}">${sender.toUpperCase()}</span>
+            `;
+            
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addTypingIndicator(id) {
+            const div = document.createElement('div');
+            div.id = id;
+            div.className = 'flex flex-col items-start space-y-2 animate-pulse';
+            div.innerHTML = `
+                <div class="bg-[#eeeeee] p-5 rounded-2xl rounded-tl-none w-16 h-10 flex items-center justify-center gap-1">
+                    <div class="w-1 h-1 bg-[#999999] rounded-full"></div>
+                    <div class="w-1 h-1 bg-[#999999] rounded-full"></div>
+                    <div class="w-1 h-1 bg-[#999999] rounded-full"></div>
+                </div>
+            `;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeTypingIndicator(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+    </script>
+</body>
+</html>
