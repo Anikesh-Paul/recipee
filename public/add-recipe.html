@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUBMIT | ALIMENTA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --color-bg: #fff; --font-main: 'Inter', sans-serif; }
+        body { font-family: var(--font-main); background: var(--color-bg); -webkit-font-smoothing: antialiased; }
+        @keyframes fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-up { animation: fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+    <script>
+        const APPWRITE_CONFIG = {
+            endpoint: 'https://fra.cloud.appwrite.io/v1',
+            projectId: '698392e100262c85b3e2',
+            databaseId: 'main',
+            collectionId: 'recipes'
+        };
+        const client = new Appwrite.Client().setEndpoint(APPWRITE_CONFIG.endpoint).setProject(APPWRITE_CONFIG.projectId);
+        const databases = new Appwrite.Databases(client);
+    </script>
+</head>
+<body class="selection:bg-black selection:text-white">
+    <nav class="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-2xl border-b border-[#eeeeee]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 h-24 flex items-center justify-between">
+            <a href="/" class="group flex items-center gap-4">
+                <div class="w-10 h-10 bg-black flex items-center justify-center text-white text-[11px] font-black tracking-tighter transform group-hover:rotate-90 transition-transform duration-500">A</div>
+                <span class="text-[11px] font-black tracking-[0.4em] uppercase">ALIMENTA.</span>
+            </a>
+            <div class="hidden md:flex items-center gap-16">
+                <a href="/" class="text-[10px] font-black uppercase tracking-[0.4em] text-[#999999] hover:text-black">Archive</a>
+                <a href="/add-recipe.html" class="text-[10px] font-black uppercase tracking-[0.4em] text-black border-b border-black pb-1">Submit</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 max-w-7xl mx-auto px-6 lg:px-12 mb-60">
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-32 py-32 animate-fade-up">
+            <div class="lg:col-span-8">
+                <h1 class="text-7xl md:text-[140px] font-black tracking-tighter leading-[0.75] text-black italic mb-24">Contribute.</h1>
+                <form id="recipe-form" class="space-y-24">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                        <div class="space-y-4"><label class="text-[10px] font-black uppercase tracking-[0.4em] text-[#999999]">Protocol Title</label>
+                        <input type="text" name="title" required class="w-full bg-transparent border-b-2 border-[#eeeeee] pb-4 text-3xl font-black tracking-tighter focus:border-black outline-none transition-all"></div>
+                        <div class="space-y-4"><label class="text-[10px] font-black uppercase tracking-[0.4em] text-[#999999]">Practitioner</label>
+                        <input type="text" name="author" required class="w-full bg-transparent border-b-2 border-[#eeeeee] pb-4 text-3xl font-black tracking-tighter focus:border-black outline-none transition-all"></div>
+                    </div>
+                    <div class="space-y-4"><label class="text-[10px] font-black uppercase tracking-[0.4em] text-[#999999]">Sensory Abstract</label>
+                    <textarea name="description" required rows="2" class="w-full bg-transparent border-b-2 border-[#eeeeee] pb-4 text-2xl font-light focus:border-black outline-none transition-all resize-none"></textarea></div>
+                    <div class="space-y-4"><label class="text-[10px] font-black uppercase tracking-[0.4em] text-[#999999]">Imagery Coordinate</label>
+                    <input type="url" name="image" class="w-full bg-transparent border-b-2 border-[#eeeeee] pb-4 text-base font-mono focus:border-black outline-none transition-all"></div>
+                    <button type="submit" class="px-24 py-8 bg-black text-white text-[11px] font-black uppercase tracking-[0.5em] hover:scale-105 transition-all w-full md:w-fit">Transmit</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.getElementById('recipe-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const btn = e.target.querySelector('button');
+            btn.innerText = 'TRANSMITTING...';
+            btn.disabled = true;
+
+            try {
+                await databases.createDocument(
+                    APPWRITE_CONFIG.databaseId,
+                    APPWRITE_CONFIG.collectionId,
+                    'unique()',
+                    {
+                        title: formData.get('title'),
+                        author: formData.get('author'),
+                        description: formData.get('description'),
+                        image: formData.get('image') || ''
+                    }
+                );
+                window.location.href = '/';
+            } catch (error) {
+                console.error(error);
+                alert('Transmission Failure. Check Appwrite Database IDs.');
+                btn.innerText = 'TRANSMIT';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

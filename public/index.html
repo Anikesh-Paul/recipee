@@ -1,10 +1,136 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" class="scroll-smooth">
 <head>
-    <title>Alimenta</title>
-    <script>window.location.href = "/";</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALIMENTA | Minimalist Gastronomy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #ffffff;
+            --color-surface: #fafafa;
+            --color-border: #eeeeee;
+            --color-text-main: #111111;
+            --color-text-muted: #666666;
+            --font-main: 'Inter', sans-serif;
+        }
+        body { font-family: var(--font-main); background-color: var(--color-bg); color: var(--color-text-main); -webkit-font-smoothing: antialiased; letter-spacing: -0.01em; }
+        .focus-ring { outline: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .focus-ring:focus-visible { box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 4px #000000; }
+        @keyframes fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-up { animation: fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #000; }
+        #progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: #000; z-index: 100; width: 0%; }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    </style>
+    <!-- Appwrite SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+    <script>
+        // CONFIGURATION: Adjust these in your Appwrite Dashboard
+        const APPWRITE_CONFIG = {
+            endpoint: 'https://fra.cloud.appwrite.io/v1',
+            projectId: '698392e100262c85b3e2',
+            databaseId: 'main', // Create this DB in Appwrite
+            collectionId: 'recipes', // Create this Collection in Appwrite
+            chatFunctionId: 'chat-bot' // Create this Function in Appwrite
+        };
+
+        const client = new Appwrite.Client()
+            .setEndpoint(APPWRITE_CONFIG.endpoint)
+            .setProject(APPWRITE_CONFIG.projectId);
+        
+        const databases = new Appwrite.Databases(client);
+        const functions = new Appwrite.Functions(client);
+    </script>
 </head>
-<body>
-    Redirecting to server... (Note: Express SSR requires a running backend node process).
+<body class="selection:bg-black selection:text-white">
+    <div id="progress-bar"></div>
+    <nav class="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-2xl border-b border-[#eeeeee]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 h-24 flex items-center justify-between">
+            <a href="/" class="group flex items-center gap-4 focus-ring rounded-lg">
+                <div class="w-10 h-10 bg-black flex items-center justify-center text-white text-[11px] font-black tracking-tighter transform group-hover:rotate-90 transition-transform duration-500">A</div>
+                <span class="text-[11px] font-black tracking-[0.4em] uppercase">ALIMENTA.</span>
+            </a>
+            <div class="hidden md:flex items-center gap-16">
+                <a href="/" class="text-[10px] font-black uppercase tracking-[0.4em] text-black border-b border-black pb-1">Archive</a>
+                <a href="/add-recipe.html" class="text-[10px] font-black uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-colors">Submit</a>
+            </div>
+            <button class="w-10 h-10 flex flex-col items-end justify-center gap-1.5 focus-ring rounded-lg group">
+                <div class="w-8 h-[2px] bg-black group-hover:w-5 transition-all"></div>
+                <div class="w-5 h-[2px] bg-black group-hover:w-8 transition-all"></div>
+            </button>
+        </div>
+    </nav>
+    <main class="pt-24">
+        <!-- HERO -->
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <section class="py-40 md:py-60 animate-fade-up">
+                <div class="max-w-4xl space-y-16">
+                    <h1 class="text-7xl md:text-[140px] font-black tracking-tighter leading-[0.75] text-black italic">FORM <span class="not-italic text-[#eeeeee]">&</span><br/>FLAVOR.</h1>
+                    <p class="text-xl md:text-3xl text-[#666666] font-light leading-snug max-w-2xl">A minimalist archive curated for the modern culinary practitioner. Discover protocols that balance structural integrity with pure sensory experience.</p>
+                </div>
+            </section>
+
+            <!-- RECIPE GRID -->
+            <section id="recipe-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-40 mb-60">
+                <div class="col-span-full py-20 text-center text-[#cccccc] font-black uppercase tracking-widest animate-pulse">Syncing Archive...</div>
+            </section>
+        </div>
+    </main>
+
+    <!-- UI/Logic for Chat and List -->
+    <script>
+        // Load Recipes
+        async function loadRecipes() {
+            const container = document.getElementById('recipe-grid');
+            try {
+                const response = await databases.listDocuments(APPWRITE_CONFIG.databaseId, APPWRITE_CONFIG.collectionId);
+                container.innerHTML = '';
+
+                if (response.documents.length === 0) {
+                    container.innerHTML = '<div class="col-span-full py-20 text-center text-[#999999] font-black uppercase tracking-widest">Archive is empty. Transmit a new protocol.</div>';
+                    return;
+                }
+
+                response.documents.forEach((recipe, index) => {
+                    const article = document.createElement('article');
+                    article.className = 'group animate-fade-up';
+                    article.style.animationDelay = `${0.2 + (index * 0.1)}s`;
+                    article.innerHTML = `
+                        <a href="/recipe.html?id=${recipe.$id}" class="block space-y-12 focus-ring rounded-xl">
+                            <div class="overflow-hidden aspect-[4/5] bg-[#fafafa] border border-[#eeeeee] relative">
+                                <img src="${recipe.image || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&q=80&w=800'}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-[1.2s] group-hover:scale-110">
+                            </div>
+                            <div class="space-y-8">
+                                <div class="flex items-start justify-between">
+                                    <h3 class="text-4xl font-black tracking-tighter leading-[0.9] italic group-hover:text-[#666666] transition-colors">${recipe.title}</h3>
+                                    <span class="text-[11px] font-black uppercase tracking-[0.4em] text-[#dddddd] pt-2">SEQ.0${index + 1}</span>
+                                </div>
+                                <p class="text-lg text-[#666666] font-light leading-relaxed line-clamp-2">${recipe.description}</p>
+                            </div>
+                        </a>
+                    `;
+                    container.appendChild(article);
+                });
+            } catch (error) {
+                console.error('Appwrite Error:', error);
+                container.innerHTML = '<div class="col-span-full py-20 text-center text-red-500 font-bold uppercase tracking-widest">Database Sync Failed. Check Dashboard Settings.</div>';
+            }
+        }
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            const pb = document.getElementById("progress-bar");
+            if(pb) pb.style.width = scrolled + "%";
+        });
+
+        document.addEventListener('DOMContentLoaded', loadRecipes);
+    </script>
 </body>
 </html>
