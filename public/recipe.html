@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROTOCOL | ALIMENTA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --color-bg: #fff; --font-main: 'Inter', sans-serif; }
+        body { font-family: var(--font-main); background: var(--color-bg); -webkit-font-smoothing: antialiased; letter-spacing: -0.01em; }
+        .focus-ring { outline: none; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-up { animation: fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .stagger-1 { animation-delay: 0.2s; }
+        #progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: #000; z-index: 100; width: 0%; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
+    <script>
+        const APPWRITE_CONFIG = {
+            endpoint: 'https://fra.cloud.appwrite.io/v1',
+            projectId: '698392e100262c85b3e2',
+            databaseId: 'main',
+            collectionId: 'recipes'
+        };
+        const client = new Appwrite.Client().setEndpoint(APPWRITE_CONFIG.endpoint).setProject(APPWRITE_CONFIG.projectId);
+        const databases = new Appwrite.Databases(client);
+    </script>
+</head>
+<body class="selection:bg-black selection:text-white">
+    <div id="progress-bar"></div>
+    <nav class="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-2xl border-b border-[#eeeeee]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 h-24 flex items-center justify-between">
+            <a href="/" class="group flex items-center gap-4">
+                <div class="w-10 h-10 bg-black flex items-center justify-center text-white text-[11px] font-black tracking-tighter transform group-hover:rotate-90 transition-transform duration-500">A</div>
+                <span class="text-[11px] font-black tracking-[0.4em] uppercase">ALIMENTA.</span>
+            </a>
+            <div class="hidden md:flex items-center gap-16">
+                <a href="/" class="text-[10px] font-black uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-colors">Archive</a>
+                <a href="/add-recipe.html" class="text-[10px] font-black uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-colors">Submit</a>
+            </div>
+        </div>
+    </nav>
+
+    <main id="recipe-content" class="pt-24 opacity-0 transition-opacity duration-1000">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 mb-60">
+            <!-- Header Section -->
+            <section class="grid grid-cols-1 lg:grid-cols-12 gap-16 py-32 md:py-48 animate-fade-up">
+                <div class="lg:col-span-8 flex flex-col justify-end space-y-16">
+                    <div class="space-y-6">
+                        <a href="/" class="group inline-flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.4em] text-[#cccccc] hover:text-black transition-colors">
+                            <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path></svg>
+                            Back to Archive
+                        </a>
+                        <h1 id="recipe-title" class="text-7xl md:text-[120px] font-black tracking-tighter leading-[0.8] text-black italic"></h1>
+                    </div>
+                    <p id="recipe-description" class="text-2xl md:text-4xl text-[#444444] font-light leading-snug max-w-4xl"></p>
+                    <div id="recipe-meta" class="grid grid-cols-2 md:grid-cols-4 gap-12 pt-16 border-t border-[#eeeeee]">
+                        <!-- Meta items here -->
+                    </div>
+                </div>
+                <div class="lg:col-span-4">
+                    <div class="aspect-[4/5] bg-[#fafafa] border border-[#eeeeee] relative overflow-hidden group">
+                        <img id="recipe-image" src="" class="w-full h-full object-cover grayscale transition-all duration-[2s] group-hover:grayscale-0 group-hover:scale-105">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Content -->
+            <section class="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-32 animate-fade-up stagger-1">
+                <aside class="lg:col-span-4 lg:sticky lg:top-32 h-fit space-y-16">
+                    <div class="bg-[#fcfcfc] border border-[#eeeeee] p-12 md:p-16 space-y-12">
+                        <h2 class="text-[11px] font-black uppercase tracking-[0.5em] border-b border-[#eeeeee] pb-8">Composition</h2>
+                        <ul id="recipe-ingredients" class="space-y-6"></ul>
+                    </div>
+                </aside>
+                <main class="lg:col-span-8 space-y-32">
+                    <div class="space-y-16">
+                        <h2 class="text-5xl font-black tracking-tighter italic">Assembly Sequence.</h2>
+                        <div id="recipe-instructions" class="space-y-24"></div>
+                    </div>
+                </main>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const recipeId = urlParams.get('id');
+
+        async function loadRecipeDetail() {
+            if (!recipeId) { window.location.href = '/'; return; }
+            try {
+                const recipe = await databases.getDocument(APPWRITE_CONFIG.databaseId, APPWRITE_CONFIG.collectionId, recipeId);
+                
+                document.getElementById('recipe-title').innerText = recipe.title + '.';
+                document.getElementById('recipe-description').innerText = recipe.description;
+                document.getElementById('recipe-image').src = recipe.image || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352';
+                
+                // Meta
+                const metaContainer = document.getElementById('recipe-meta');
+                metaContainer.innerHTML = `
+                    <div class="space-y-3"><div class="text-[10px] font-bold uppercase tracking-[0.4em] text-[#999999]">Originator</div><div class="text-xl font-black italic tracking-tighter">${recipe.author}</div></div>
+                    <div class="space-y-3"><div class="text-[10px] font-bold uppercase tracking-[0.4em] text-[#999999]">Ref Code</div><div class="text-xl font-black italic tracking-tighter">SEQ.${recipeId.substring(0,4).toUpperCase()}</div></div>
+                `;
+
+                // Ingredients
+                const ingList = document.getElementById('recipe-ingredients');
+                const ingredients = Array.isArray(recipe.ingredients) ? recipe.ingredients : (recipe.ingredients || '').split('\n').filter(i => i.trim());
+                ingredients.forEach(ing => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-center justify-between group';
+                    li.innerHTML = `<span class="text-xl font-light text-[#444444] group-hover:text-black transition-colors">${ing.trim()}</span><div class="w-2.5 h-2.5 rounded-full border-2 border-[#eeeeee] group-hover:bg-black transition-all"></div>`;
+                    ingList.appendChild(li);
+                });
+
+                // Instructions
+                const insList = document.getElementById('recipe-instructions');
+                const steps = Array.isArray(recipe.instructions) ? recipe.instructions : (recipe.instructions || '').split('\n').filter(s => s.trim());
+                steps.forEach((step, i) => {
+                    const div = document.createElement('div');
+                    div.className = 'grid grid-cols-1 md:grid-cols-12 gap-12 group';
+                    div.innerHTML = `
+                        <div class="md:col-span-1"><span class="text-4xl font-black text-[#eeeeee] group-hover:text-black transition-colors">0${i+1}</span></div>
+                        <div class="md:col-span-11 space-y-6 pt-2"><p class="text-2xl md:text-3xl font-light text-[#444444] group-hover:text-black transition-colors">${step.trim()}.</p><div class="w-0 group-hover:w-full h-[1px] bg-black opacity-20 transition-all duration-700"></div></div>
+                    `;
+                    insList.appendChild(div);
+                });
+
+                document.getElementById('recipe-content').classList.remove('opacity-0');
+            } catch (err) {
+                console.error(err);
+                alert('Protocol Retrieval Failed.');
+            }
+        }
+
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            const pb = document.getElementById("progress-bar");
+            if(pb) pb.style.width = scrolled + "%";
+        });
+
+        document.addEventListener('DOMContentLoaded', loadRecipeDetail);
+    </script>
+</body>
+</html>
