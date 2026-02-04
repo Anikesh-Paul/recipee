@@ -1,141 +1,206 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ALIMENTA | Minimalist Gastronomy</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Appwrite client config (exposed from server .env) -->
     <script>
-        window.APPWRITE = {
-            endpoint: '<%= appwrite.endpoint %>',
-            projectId: '<%= appwrite.projectId %>',
-            projectName: '<%= appwrite.name %>'
-        };
+      window.APPWRITE = {
+        endpoint: "<%= appwrite.endpoint %>",
+        projectId: "<%= appwrite.projectId %>",
+        projectName: "<%= appwrite.name %>",
+      };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@8.0.0/dist/appwrite.min.js"></script>
     <script>
-        (function(){
-            try {
-                if (typeof Appwrite !== 'undefined') {
-                    const client = new Appwrite.Client();
-                    if (window.APPWRITE.endpoint) client.setEndpoint(window.APPWRITE.endpoint);
-                    if (window.APPWRITE.projectId) client.setProject(window.APPWRITE.projectId);
-                    window.appwriteClient = client;
-                }
-            } catch (e) {
-                console.warn('Appwrite init failed:', e);
-            }
-        })();
+      (function () {
+        try {
+          if (typeof Appwrite !== "undefined") {
+            const client = new Appwrite.Client();
+            if (window.APPWRITE.endpoint)
+              client.setEndpoint(window.APPWRITE.endpoint);
+            if (window.APPWRITE.projectId)
+              client.setProject(window.APPWRITE.projectId);
+            window.appwriteClient = client;
+          }
+        } catch (e) {
+          console.warn("Appwrite init failed:", e);
+        }
+      })();
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        :root {
-            --color-bg: #ffffff;
-            --color-surface: #fafafa;
-            --color-border: #eeeeee;
-            --color-text-main: #111111;
-            --color-text-muted: #666666;
-            --font-main: 'Inter', sans-serif;
-        }
+      :root {
+        --color-bg: #ffffff;
+        --color-surface: #fafafa;
+        --color-border: #eeeeee;
+        --color-text-main: #111111;
+        --color-text-muted: #666666;
+        --font-main: "Inter", sans-serif;
+      }
 
-        body {
-            font-family: var(--font-main);
-            background-color: var(--color-bg);
-            color: var(--color-text-main);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            letter-spacing: -0.01em;
-            word-spacing: 0.05em;
-        }
+      body {
+        font-family: var(--font-main);
+        background-color: var(--color-bg);
+        color: var(--color-text-main);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        letter-spacing: -0.01em;
+        word-spacing: 0.05em;
+      }
 
-        .focus-ring {
-            outline: none;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+      .focus-ring {
+        outline: none;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
 
-        .focus-ring:focus-visible {
-            box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 4px #000000;
-        }
+      .focus-ring:focus-visible {
+        box-shadow:
+          0 0 0 2px var(--color-bg),
+          0 0 0 4px #000000;
+      }
 
-        @keyframes fade-up {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+      @keyframes fade-up {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-        .animate-fade-up {
-            animation: fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+      .animate-fade-up {
+        animation: fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
 
-        .stagger-1 { animation-delay: 0.1s; }
-        .stagger-2 { animation-delay: 0.2s; }
-        .stagger-3 { animation-delay: 0.3s; }
+      .stagger-1 {
+        animation-delay: 0.1s;
+      }
+      .stagger-2 {
+        animation-delay: 0.2s;
+      }
+      .stagger-3 {
+        animation-delay: 0.3s;
+      }
 
-        /* Custom minimal scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #000000; border-radius: 0; }
-        
-        .image-reveal {
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .image-reveal img {
-            transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1), filter 1.5s ease;
-        }
+      /* Custom minimal scrollbar */
+      ::-webkit-scrollbar {
+        width: 5px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #000000;
+        border-radius: 0;
+      }
 
-        /* Reading Progress Bar */
-        #progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: #000000;
-            z-index: 100;
-            width: 0%;
-            transition: width 0.1s ease-out;
-        }
+      .image-reveal {
+        overflow: hidden;
+        position: relative;
+      }
+
+      .image-reveal img {
+        transition:
+          transform 1.5s cubic-bezier(0.16, 1, 0.3, 1),
+          filter 1.5s ease;
+      }
+
+      /* Reading Progress Bar */
+      #progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: #000000;
+        z-index: 100;
+        width: 0%;
+        transition: width 0.1s ease-out;
+      }
     </style>
     <script>
-        window.onscroll = function() {
-            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            var scrolled = (winScroll / height) * 100;
-            document.getElementById("progress-bar").style.width = scrolled + "%";
-        };
+      window.onscroll = function () {
+        var winScroll =
+          document.body.scrollTop || document.documentElement.scrollTop;
+        var height =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
+        var scrolled = (winScroll / height) * 100;
+        document.getElementById("progress-bar").style.width = scrolled + "%";
+      };
     </script>
-</head>
-<body class="selection:bg-black selection:text-white">
+  </head>
+  <body class="selection:bg-black selection:text-white">
     <div id="progress-bar"></div>
-    <nav class="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-2xl border-b border-[#eeeeee]">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12 h-24 flex items-center justify-between">
-            <a href="/" class="group flex items-center gap-4 focus-ring rounded-lg">
-                <div class="w-10 h-10 bg-black flex items-center justify-center text-white text-[11px] font-black tracking-tighter transform group-hover:rotate-90 transition-transform duration-500">A</div>
-                <span class="text-[11px] font-black tracking-[0.4em] uppercase">ALIMENTA.</span>
-            </a>
-            
-            <div class="hidden md:flex items-center gap-16">
-                <a href="/" class="relative text-[10px] font-black uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-colors group">
-                    Archive
-                    <span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-black transition-all group-hover:w-full"></span>
-                </a>
-                <a href="/add-recipe" class="relative text-[10px] font-black uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-colors group">
-                    Submit
-                    <span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-black transition-all group-hover:w-full"></span>
-                </a>
-                <a href="#" class="relative text-[10px] font-black uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-colors group">
-                    Manual
-                    <span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-black transition-all group-hover:w-full"></span>
-                </a>
-            </div>
+    <nav
+      class="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-2xl border-b border-[#eeeeee]"
+    >
+      <div
+        class="max-w-7xl mx-auto px-6 lg:px-12 h-24 flex items-center justify-between"
+      >
+        <a href="/" class="group flex items-center gap-4 focus-ring rounded-lg">
+          <div
+            class="w-10 h-10 bg-black flex items-center justify-center text-white text-[11px] font-black tracking-tighter transform group-hover:rotate-90 transition-transform duration-500"
+          >
+            A
+          </div>
+          <span class="text-[11px] font-black tracking-[0.4em] uppercase"
+            >ALIMENTA.</span
+          >
+        </a>
 
-            <button class="w-10 h-10 flex flex-col items-end justify-center gap-1.5 focus-ring rounded-lg group" aria-label="Menu">
-                <div class="w-8 h-[2px] bg-black group-hover:w-5 transition-all duration-300"></div>
-                <div class="w-5 h-[2px] bg-black group-hover:w-8 transition-all duration-300"></div>
-            </button>
+        <div class="hidden md:flex items-center gap-16">
+          <a
+            href="/"
+            class="relative text-[10px] font-black uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-colors group"
+          >
+            Archive
+            <span
+              class="absolute -bottom-2 left-0 w-0 h-[2px] bg-black transition-all group-hover:w-full"
+            ></span>
+          </a>
+          <a
+            href="/add-recipe"
+            class="relative text-[10px] font-black uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-colors group"
+          >
+            Submit
+            <span
+              class="absolute -bottom-2 left-0 w-0 h-[2px] bg-black transition-all group-hover:w-full"
+            ></span>
+          </a>
+          <a
+            href="#"
+            class="relative text-[10px] font-black uppercase tracking-[0.4em] text-[#999999] hover:text-black transition-colors group"
+          >
+            Manual
+            <span
+              class="absolute -bottom-2 left-0 w-0 h-[2px] bg-black transition-all group-hover:w-full"
+            ></span>
+          </a>
         </div>
+
+        <button
+          class="w-10 h-10 flex flex-col items-end justify-center gap-1.5 focus-ring rounded-lg group"
+          aria-label="Menu"
+        >
+          <div
+            class="w-8 h-[2px] bg-black group-hover:w-5 transition-all duration-300"
+          ></div>
+          <div
+            class="w-5 h-[2px] bg-black group-hover:w-8 transition-all duration-300"
+          ></div>
+        </button>
+      </div>
     </nav>
-    <main class="pt-24">
+    <main class="pt-24"></main>
+  </body>
+</html>
