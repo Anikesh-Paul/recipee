@@ -5,6 +5,22 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Normalize Appwrite env vars (trim quotes/spaces)
+const rawAppwriteProjectId = process.env.VITE_APPWRITE_PROJECT_ID || process.env.APPWRITE_PROJECT_ID || '';
+const rawAppwriteEndpoint = process.env.VITE_APPWRITE_ENDPOINT || process.env.APPWRITE_ENDPOINT || '';
+const rawAppwriteName = process.env.VITE_APPWRITE_PROJECT_NAME || process.env.APPWRITE_PROJECT_NAME || '';
+
+const APPWRITE = {
+    projectId: rawAppwriteProjectId.replace(/^[\"']|[\"']$/g, '').trim(),
+    endpoint: rawAppwriteEndpoint.replace(/^[\"']|[\"']$/g, '').trim(),
+    name: rawAppwriteName.replace(/^[\"']|[\"']$/g, '').trim(),
+};
+
+console.log('Appwrite config:', {
+    projectId: APPWRITE.projectId ? `${APPWRITE.projectId.substring(0, 6)}...` : '(not set)',
+    endpoint: APPWRITE.endpoint || '(not set)'
+});
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -31,6 +47,8 @@ app.use((req, res, next) => {
 // Set global defaults for templates
 app.use((req, res, next) => {
     res.locals.currentCategory = 'All';
+    // expose Appwrite config to all EJS templates (for client-side Appwrite SDK)
+    res.locals.appwrite = APPWRITE;
     next();
 });
 

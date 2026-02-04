@@ -5,6 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALIMENTA | Minimalist Gastronomy</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Appwrite client config (exposed from server .env) -->
+    <script>
+        window.APPWRITE = {
+            endpoint: '<%= appwrite.endpoint %>',
+            projectId: '<%= appwrite.projectId %>',
+            projectName: '<%= appwrite.name %>'
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@8.0.0/dist/appwrite.min.js"></script>
+    <script>
+        (function(){
+            try {
+                if (typeof Appwrite !== 'undefined') {
+                    const client = new Appwrite.Client();
+                    if (window.APPWRITE.endpoint) client.setEndpoint(window.APPWRITE.endpoint);
+                    if (window.APPWRITE.projectId) client.setProject(window.APPWRITE.projectId);
+                    window.appwriteClient = client;
+                }
+            } catch (e) {
+                console.warn('Appwrite init failed:', e);
+            }
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">

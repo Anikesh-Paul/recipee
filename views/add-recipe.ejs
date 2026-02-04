@@ -130,4 +130,47 @@
     </section>
 </div>
 
-<%- include('partials/footer') %>
+        <!-- Optional: client-side Appwrite submission helper
+             To enable client-side storage, set up a Database and Collection in Appwrite
+             then replace DATABASE_ID and COLLECTION_ID below. This code gracefully
+             falls back to the server POST (/api/recipes) if Appwrite is not configured.
+        -->
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('form[action="/api/recipes"]');
+            if (!form) return;
+
+            form.addEventListener('submit', async (e) => {
+                // If no Appwrite client available, let the form post to server as normal
+                if (!window.appwriteClient || typeof Appwrite === 'undefined') return;
+
+                // Example outline: replace with your Database and Collection IDs
+                const DATABASE_ID = 'DATABASE_ID';
+                const COLLECTION_ID = 'COLLECTION_ID';
+
+                try {
+                    // Prevent default to submit via Appwrite instead of server
+                    // e.preventDefault();
+
+                    // Example using Appwrite JS SDK (uncomment and adapt when IDs are set)
+                    // const db = new Appwrite.Databases(window.appwriteClient);
+                    // const formData = new FormData(form);
+                    // const doc = {
+                    //   title: formData.get('title'),
+                    //   description: formData.get('description'),
+                    //   ingredients: formData.get('ingredients'),
+                    //   instructions: formData.get('instructions'),
+                    //   image: formData.get('image'),
+                    //   author: formData.get('author')
+                    // };
+                    // await db.createDocument(DATABASE_ID, COLLECTION_ID, 'unique()', doc);
+
+                    // If Appwrite create succeeds, you can redirect or update the UI.
+                } catch (err) {
+                    console.error('Appwrite submit failed, falling back to server:', err);
+                }
+            });
+        });
+        </script>
+
+        <%- include('partials/footer') %>
